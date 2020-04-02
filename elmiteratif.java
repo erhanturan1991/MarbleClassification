@@ -1,9 +1,13 @@
 package crossValidation;
 
-import gui.ELMM;
+/*This code block performs iterative cross-validation testing of the ELM machine using the Weka library.
+ *Using 10-fold cross verification, the number of cells in the middle layer of the ELM machine is increased by 250,
+ *starting from 250 respectively. The effect of the number of cells in the intermediate layer on the classification
+ *success of the ELM is recorded by recording in series. Few of the data sets used in the study were shared to be 
+ *descriptive.*/
 
+import ELMM;
 import java.util.Random;
-
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -19,43 +23,40 @@ public class elmiteratif {
 		long tmp = Math.round(value);
 		return (double) tmp / factor;
 	}
-	public static double ortalamaHesapla(Double dizi[]){ 
+	//Array average function
+	public static double calculateAverage(Double dizi[]){ 
 		double toplam = 0; 
 		for (int i = 0; i < dizi.length; i++){ 
-			toplam = toplam + dizi[i]; 					//Formül ile ortalama deðerini bulma iþlemi 
+			toplam = toplam + dizi[i]; 					
 		} 
-		return (double) (toplam / dizi.length); 	//Ortalama  alýndý
+		return (double) (toplam / dizi.length);
 
 	} 
 
-	public static double standartSapmaHesapla(Double dizi[], double ort) { 
+	public static double calculateStandartDeviation(Double dizi[], double ort) { 
 		double kareToplam = 0; 
 		for (int i = 0; i < dizi.length; i++){ 
-			kareToplam = kareToplam + dizi[i] * dizi[i]; 			//Formül ile standart sapma bulme iþlemi
+			kareToplam = kareToplam + dizi[i] * dizi[i]; //Standart Deviation forumualtion
 		} 
-		return (double) Math.sqrt(kareToplam / dizi.length - ort*ort);	//Sapma deðeri alýndý
-
+		return (double) Math.sqrt(kareToplam / dizi.length - ort*ort);
 	} 
-	
 	
 	public static void main(String[] args) throws Exception {
 		// loads data and set class index
-		Instances data = DataSource.read("C:\\Users\\Erhan\\eclipse-workspace\\mermer_kalitelendirme\\src\\crossValidation\\mix4sHistLBP.arff");
-		//String clsIndex = Utils.getOption("c", args);
-		//data.setClassIndex(Integer.parseInt(clsIndex) - 1);
+		Instances data = DataSource.read("path\\mix4sHistLBP.arff"); //Dataset path must input manually.
 		data.setClassIndex(data.numAttributes()-1);
 
-		//ELM nin Ayarlarý
+		//Extreme Learning Machine input options
 		String crs="";
 		ELMM elm=new ELMM();
-		elm.setActiveFunction("sig");
+		elm.setActiveFunction("sig"); //Another activation function sin, radbas, tansig
 		elm.setNumDecimalPlaces(3);
 		
 		int seed = 1;
 		int folds = 10;
 		
 		for (int m = 0; m <12; m++) {	
-			System.out.println("ERHAN TURAN");
+			
 			elm.setNumberofHiddenNeurons(250+250*m);	
 			System.out.println(elm.getActiveFunction());
 			// randomize data
@@ -84,13 +85,10 @@ public class elmiteratif {
 			
 			// output evaluation
 			System.out.println(elm.getActiveFunction());
-			//System.out.println(evalAll.toSummaryString("=== " + folds + "-fold Cross-validation ===", false));
-			/*System.out.println(evalAll.toMatrixString("=== Confusion matrix for fold " + "/" + folds + " ===\n"));		
-			System.out.println("Sayýlarýn standart sapmasý: "+standartSapmaHesapla(std, ortalamaHesapla(std))); 
-			System.out.println("Roc alaný:"+evalAll.areaUnderROC(0)+" "+evalAll.areaUnderROC(1));*/
+			
 			
 		}
-		System.out.println("Capraz Dogrulama:"+crs);
+		System.out.println("Cross Valaidation:"+crs);
 	}
 	
 	
