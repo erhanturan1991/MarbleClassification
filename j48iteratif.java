@@ -1,5 +1,8 @@
 package crossValidation;
-
+/* In this code block, testing was performed on the marble data set of the J48 decision
+ * tree using the weka library. The J48 classification success of the Coinfidence factor
+ * has been tested using 10-Fold cross-validation.
+ * */
 import java.util.Random;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
@@ -15,48 +18,39 @@ public class j48iteratif {
 		long tmp = Math.round(value);
 		return (double) tmp / factor;
 	}
-	public static double ortalamaHesapla(Double dizi[]){ 
+	//Array average function
+	public static double calculateAverage(Double dizi[]){ 
 		double toplam = 0; 
 		for (int i = 0; i < dizi.length; i++){ 
-			toplam = toplam + dizi[i]; 					//Formül ile ortalama deðerini bulma iþlemi 
+			toplam = toplam + dizi[i]; 					
 		} 
-		return (double) (toplam / dizi.length); 	//Ortalama  alýndý
-
+		return (double) (toplam / dizi.length); 	
 	} 
 
-	public static double standartSapmaHesapla(Double dizi[], double ort) { 
+	public static double calculateStandartDeviation(Double dizi[], double ort) { 
 		double kareToplam = 0; 
 		for (int i = 0; i < dizi.length; i++){ 
-			kareToplam = kareToplam + dizi[i] * dizi[i]; 			//Formül ile standart sapma bulme iþlemi
+			kareToplam = kareToplam + dizi[i] * dizi[i]; 			
 		} 
-		return (double) Math.sqrt(kareToplam / dizi.length - ort*ort);	//Sapma deðeri alýndý
-
+		return (double) Math.sqrt(kareToplam / dizi.length - ort*ort);	
 	} 
-	
 	
 	public static void main(String[] args) throws Exception {
 		// loads data and set class index
-		Instances data = DataSource.read("C:\\Users\\Erhan\\eclipse-workspace\\mermer_kalitelendirme\\src\\crossValidation\\mix4sHistLBP.arff");
-		//String clsIndex = Utils.getOption("c", args);
-		//data.setClassIndex(Integer.parseInt(clsIndex) - 1);
+		Instances data = DataSource.read("path\\mix4sHistLBP.arff");
 		data.setClassIndex(data.numAttributes()-1);
-
-		//ELM nin Ayarlarý
-		String crs="";
-		
+		String crs="";	
 		J48 j48tree = new J48();
 	    j48tree.setNumDecimalPlaces(3);
 		j48tree.setSubtreeRaising(true);
 		j48tree.setMinNumObj(1);
 		j48tree.setDoNotCheckCapabilities(false);
-		//j48tree.setConfidenceFactor(Float.parseFloat("0.1"));
 		j48tree.setUnpruned(true);
 		
 		int seed = 1;
 		int folds = 10;
 		
 		for (int m = 1; m <10; m++) {	
-			System.out.println("ERHAN TURAN");
 			
 			j48tree.setConfidenceFactor((float) (0.1*m));
 			// randomize data
@@ -83,14 +77,9 @@ public class j48iteratif {
 			crs=crs+round((accuracy*100),2)+",";	
 			
 			// output evaluation
-			System.out.println(j48tree.getConfidenceFactor());
-			//System.out.println(evalAll.toSummaryString("=== " + folds + "-fold Cross-validation ===", false));
-			/*System.out.println(evalAll.toMatrixString("=== Confusion matrix for fold " + "/" + folds + " ===\n"));		
-			System.out.println("Sayýlarýn standart sapmasý: "+standartSapmaHesapla(std, ortalamaHesapla(std))); 
-			System.out.println("Roc alaný:"+evalAll.areaUnderROC(0)+" "+evalAll.areaUnderROC(1));*/
-			
+			System.out.println(j48tree.getConfidenceFactor());			
 		}
-		System.out.println("Capraz Dogrulama:"+crs);
+		System.out.println("10-Fold Cross Validation:"+crs);
 	}
 	
 	
