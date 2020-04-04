@@ -1,0 +1,24 @@
+Instruction Guide 
+
+Definition of the code root:
+
+This program classifies the marble images using LBP and Histogram Features.
+
+The intelligent classifier is Extreme Learning Machine (ELM).
+
+To evaluate the main classifier, Support Vector Machine (SVM), Artificial Neural Networks (ANN) are also tested.
+
+After the feature extraction above listed files are gathered:
+
+mix4s-histogram.arff
+mix4s-lbp.arff
+mix4s-HistLBP.arff
+
+Those files include the features of the marble images whose class labels are ' keivan',' onyx',' rossolevanto' and ' siyah'
+
+The classifier code design files are listed as follows:
+
+elmiteratif.java
+svmcapraz.java
+ysaiteratif.java
+j48iteratif.java
